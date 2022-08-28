@@ -30,6 +30,7 @@ import static com.craftinginterpreters.lox.TokenType.STAR;
 import static com.craftinginterpreters.lox.TokenType.STRING;
 import static com.craftinginterpreters.lox.TokenType.TRUE;
 import static com.craftinginterpreters.lox.TokenType.VAR;
+import static com.craftinginterpreters.lox.TokenType.WHILE;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,6 +77,11 @@ class Parser {
             return ifStatement();
         }
 
+        if (match(WHILE)) {
+            return whileStatement();
+        }
+
+
         if (match(LEFT_BRACE)) {
             return new Stmt.Block(block());
         }
@@ -112,6 +118,15 @@ class Parser {
 
         consume(SEMICOLON, "Expect ';' after variable declaration.");
         return new Stmt.Var(name, initializer);
+    }
+
+    private Stmt whileStatement() {
+        consume(LEFT_PAREN, "Expect '(' after 'while'.");
+        Expr condition = expression();
+        consume(RIGHT_PAREN, "Expect ')' after condition.");
+        Stmt body = statement();
+
+        return new Stmt.While(condition, body);
     }
 
     private Stmt expressionStatement() {
