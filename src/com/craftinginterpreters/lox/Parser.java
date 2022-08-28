@@ -25,6 +25,7 @@ import static com.craftinginterpreters.lox.TokenType.NUMBER;
 import static com.craftinginterpreters.lox.TokenType.OR;
 import static com.craftinginterpreters.lox.TokenType.PLUS;
 import static com.craftinginterpreters.lox.TokenType.PRINT;
+import static com.craftinginterpreters.lox.TokenType.RETURN;
 import static com.craftinginterpreters.lox.TokenType.RIGHT_BRACE;
 import static com.craftinginterpreters.lox.TokenType.RIGHT_PAREN;
 import static com.craftinginterpreters.lox.TokenType.SEMICOLON;
@@ -80,6 +81,11 @@ class Parser {
         if (match(PRINT)) {
             return printStatement();
         }
+
+        if (match(RETURN)) {
+            return returnStatement();
+        }
+
 
         if (match(FOR)) {
             return forStatement();
@@ -159,6 +165,17 @@ class Parser {
         Expr value = expression();
         consume(SEMICOLON, "Expect ';' after value.");
         return new Stmt.Print(value);
+    }
+
+    private Stmt returnStatement() {
+        Token keyword = previous();
+        Expr value = null;
+        if (!check(SEMICOLON)) {
+            value = expression();
+        }
+
+        consume(SEMICOLON, "Expect ';' after return value.");
+        return new Stmt.Return(keyword, value);
     }
 
     private Stmt varDeclaration() {
