@@ -225,6 +225,11 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
                     "Can only call functions and classes.");
         }
         LoxCallable function = (LoxCallable) callee;
+        if (arguments.size() != function.arity()) {
+            throw new RuntimeError(expr.paren, "Expected " +
+                    function.arity() + " arguments but got " +
+                    arguments.size() + ".");
+        }
         return function.call(this, arguments);
     }
 
