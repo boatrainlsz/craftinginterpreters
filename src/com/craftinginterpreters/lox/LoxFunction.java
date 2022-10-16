@@ -6,7 +6,11 @@ class LoxFunction implements LoxCallable {
     private final Stmt.Function declaration;
 
     private final Environment closure;
-
+    LoxFunction bind(LoxInstance instance) {
+        Environment environment = new Environment(closure);
+        environment.define("this", instance);
+        return new LoxFunction(declaration, environment);
+    }
 
     LoxFunction(Stmt.Function declaration, Environment closure) {
         this.closure = closure;
