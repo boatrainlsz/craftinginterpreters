@@ -1,2 +1,2 @@
 # jlox
-https://github.com/boatrainlsz/craftinginterpreters_zh的jlox实现
+[craftinginterpreters_zh](https://github.com/boatrainlsz/craftinginterpreters_zh)的jlox实现
